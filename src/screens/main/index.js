@@ -1,10 +1,14 @@
-import { useContext } from "react";
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useContext, useState } from "react";
+import { ActivityIndicator, FlatList, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SearchInput from "../../components/SearchInput";
 import { DataContext } from "../../context";
 
 export default function MainScreen({ navigation }) {
 
     const { data, isDone } = useContext(DataContext);
+
+    const [indexState, setIndexState] = useState(0);
 
     const renderItem = ({ item }) => {
         return (
@@ -30,23 +34,59 @@ export default function MainScreen({ navigation }) {
     }
 
     return (
-        <>
-            {!isDone &&
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator size={'large'} />
+        <KeyboardAvoidingView
+            style={styles.main}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <SearchInput />
+            <View style={styles.center}>
+                <TouchableOpacity
+                    style={styles.listButton}
+                    onPress={() => {
+                        setIndexState((previous) => previous - 1)
+                    }}
+                >
+                    <MaterialCommunityIcons name="skip-previous" size={20} color={'#000'} />
+                </TouchableOpacity>
+                {!isDone && <ActivityIndicator size={'large'} />}
+                {isDone && <View style={styles.list}>
+                    <FlatList
+                        data={data}
+                        renderItem={renderItem}
+                        horizontal
+                        getItemLayout={(data, index) => (
+                            {
+                                length: 50,
+                                offset: 0,
+                                index
+                            }
+                        )}
+                    />
                 </View>}
-            {isDone &&
-                <View style={styles.main}>
-                    <View style={styles.list}>
-                        <FlatList
-                            data={data}
-                            renderItem={renderItem}
-                            horizontal
-                        />
+                <TouchableOpacity
+                    style={styles.listButton}
+                    onPress={() => {
+                        setIndexState((previous) => previous + 1)
+                    }}
+                >
+                    <MaterialCommunityIcons name="skip-next" size={20} color={'#000'} />
+                </TouchableOpacity>
+            </View>
+            <View style={styles.paginationContainer}>
+                <TouchableOpacity>
+                    <View style={styles.paginationButtons}>
+                        <MaterialCommunityIcons name="page-previous" size={20} color={'#FFF'} />
+                        <Text style={styles.paginationText}>Previous Page</Text>
                     </View>
-                </View>
-            }
-        </>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <View style={styles.paginationButtons}>
+                        <Text style={styles.paginationText}>Next Page</Text>
+                        <MaterialCommunityIcons name="page-next" size={20} color={'#FFF'} />
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -54,14 +94,35 @@ const styles = StyleSheet.create({
     main: {
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         backgroundColor: '#f5f5f5',
     },
+    input: {
+        height: 50,
+        width: 200,
+        borderWidth: 1,
+        paddingHorizontal: 10,
+    },
+    center: {
+        width: '100%',
+        height: 425,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    listButton: {
+        backgroundColor: '#d1d1d1',
+        height: 30,
+        width: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 100,
+    },
     list: {
-        marginTop: 100,
         width: '80%',
         height: 425,
-        marginHorizontal: 30,
-        backgroundColor: '#ededed',
+        marginHorizontal: 5,
+        backgroundColor: '#f0f0f0',
     },
     card: {
         marginHorizontal: 15,
@@ -103,5 +164,27 @@ const styles = StyleSheet.create({
         textShadowColor: '#f20000',
         textShadowRadius: 8,
         textShadowOffset: { width: 3, height: 3 },
+    },
+    paginationContainer: {
+        height: 80,
+        width: '80%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    paginationButtons: {
+        backgroundColor: 'blue',
+        width: 160,
+        height: 50,
+        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: 10,
+    },
+    paginationText: {
+        color: '#FFF',
+        fontSize: 15,
+        fontWeight: 'bold',
     },
 })

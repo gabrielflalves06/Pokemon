@@ -5,6 +5,7 @@ import Header from './src/components/Header';
 import { DataProvider } from './src/context';
 import MainScreen from './src/screens/main';
 import DetailScreen from './src/screens/details';
+import OpeningScreen from './src/screens/opening';
 
 export default function App() {
 
@@ -13,7 +14,14 @@ export default function App() {
   return (
     <DataProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Main'>
+        <Stack.Navigator initialRouteName='Opening'>
+          <Stack.Screen
+            name='Opening'
+            component={OpeningScreen}
+            options={{
+              headerTitle: (props) => <Header {...props} />,
+            }}
+          />
           <Stack.Screen
             name='Main'
             component={MainScreen}

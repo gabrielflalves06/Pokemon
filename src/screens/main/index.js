@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { ActivityIndicator, FlatList, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchInput from "../../components/SearchInput";
 import { DataContext } from "../../context";
 

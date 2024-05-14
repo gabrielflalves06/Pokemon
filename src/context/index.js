@@ -18,10 +18,11 @@ const DataProvider = ({ children }) => {
         const results = await body.results;
         let id = 1;
         for (const e of results) {
-            const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+            const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
             const capitalized = e.name.charAt(0).toUpperCase();
             const name = capitalized.concat(e.name.substring(1, e.name.length));
-            fetched.push({ name, image });
+            const url = e.url;
+            fetched.push({ name, image, url });
             id++;
         }
         setData(fetched);

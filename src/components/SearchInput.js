@@ -6,8 +6,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export default function SearchInput() {
 
     const [searchValue, setSearchValue] = useState();
-
-    const handleSearch = () => {
+  
+    const handleSearch = ({name}) => {
         
     }
 

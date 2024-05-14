@@ -8,11 +8,9 @@ export default function MainScreen({ navigation }) {
 
     const { data, isDone } = useContext(DataContext);
 
-    const [indexState, setIndexState] = useState(0);
-
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Details')}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Details', { item: item })}>
                 <View style={styles.header}>
                     <Image
                         source={{ uri: item.image }}
@@ -40,52 +38,18 @@ export default function MainScreen({ navigation }) {
         >
             <SearchInput />
             <View style={styles.center}>
-                <TouchableOpacity
-                    style={styles.listButton}
-                    onPress={() => {
-                        setIndexState((previous) => previous - 1)
-                    }}
-                >
-                    <MaterialCommunityIcons name="skip-previous" size={20} color={'#000'} />
-                </TouchableOpacity>
                 {!isDone && <ActivityIndicator size={'large'} />}
                 {isDone && <View style={styles.list}>
                     <FlatList
                         data={data}
                         renderItem={renderItem}
                         horizontal
-                        getItemLayout={(data, index) => (
-                            {
-                                length: 50,
-                                offset: 0,
-                                index
-                            }
-                        )}
+                        showsHorizontalScrollIndicator={false}
+                        initialNumToRender={10}
                     />
                 </View>}
-                <TouchableOpacity
-                    style={styles.listButton}
-                    onPress={() => {
-                        setIndexState((previous) => previous + 1)
-                    }}
-                >
-                    <MaterialCommunityIcons name="skip-next" size={20} color={'#000'} />
-                </TouchableOpacity>
             </View>
-            <View style={styles.paginationContainer}>
-                <TouchableOpacity>
-                    <View style={styles.paginationButtons}>
-                        <MaterialCommunityIcons name="page-previous" size={20} color={'#FFF'} />
-                        <Text style={styles.paginationText}>Previous Page</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.paginationButtons}>
-                        <Text style={styles.paginationText}>Next Page</Text>
-                        <MaterialCommunityIcons name="page-next" size={20} color={'#FFF'} />
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <View></View>
         </KeyboardAvoidingView>
     );
 }
@@ -122,7 +86,6 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 425,
         marginHorizontal: 5,
-        backgroundColor: '#f0f0f0',
     },
     card: {
         marginHorizontal: 15,
@@ -164,27 +127,5 @@ const styles = StyleSheet.create({
         textShadowColor: '#f20000',
         textShadowRadius: 8,
         textShadowOffset: { width: 3, height: 3 },
-    },
-    paginationContainer: {
-        height: 80,
-        width: '80%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    paginationButtons: {
-        backgroundColor: 'blue',
-        width: 160,
-        height: 50,
-        borderRadius: 100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        gap: 10,
-    },
-    paginationText: {
-        color: '#FFF',
-        fontSize: 15,
-        fontWeight: 'bold',
     },
 })

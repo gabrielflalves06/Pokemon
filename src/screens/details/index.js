@@ -31,7 +31,6 @@ export default function DetailScreen({ route }) {
 
     useEffect(() => {
         setIndex(Detalhes.id - 1)
-        console.log(Index)
     }, [Detalhes])
 
     return (
@@ -43,51 +42,46 @@ export default function DetailScreen({ route }) {
             )}
             {!isLoading && (
                 <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={styles.sectionTitle}>#{Detalhes.id}</Text>
-                        <View style={styles.imageContainer}>
-                            <TouchableOpacity
-                                style={styles.navigationButton}
-                                disabled={Index == 0}
-                                onPress={() => {
-                                    if (Index > 0) {
-                                        setIndex(Index - 1);
-                                        getData(Pokemons[Index - 1].url);
-                                    }
-                                }}
-                                title="Anterior"
-                            >
-                                <Image
-                                    source={require('../../../assets/images/arrow_left.png')}
-                                    style={styles.arrow}
-                                />
-                            </TouchableOpacity>
+                    <View style={styles.imageContainer}>
+                        <TouchableOpacity
+                            style={styles.navigationButton}
+                            disabled={Index == 0}
+                            onPress={() => {
+                                if (Index > 0) {
+                                    getData(Pokemons[Index - 1].url);
+                                }
+                            }}
+                            title="Anterior"
+                        >
 
-                            <Image source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${Detalhes.id}.png` }} style={styles.image} />
+                            <Image
+                                source={require('../../../assets/images/arrow_left.png')}
+                                style={styles.arrow}
+                            />
+                        </TouchableOpacity>
+
+                        <Image source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${Detalhes.id}.png` }} style={styles.image} />
 
 
-                            <TouchableOpacity
-                                style={styles.navigationButton}
-                                disabled={Index >= Pokemons.length - 1}
-                                onPress={() => {
-                                    if (Index < Pokemons.length - 1) {
-                                        setIndex(Index + 1);
-                                        getData(Pokemons[Index + 1].url);
-                                    }
-                                }}
-                                title=""
-                            >
-                                <Image
-                                    source={require('../../../assets/images/arrow_right.png')}
-                                    style={styles.arrow}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.name}>{Detalhes.name}</Text>
-                        <Text style={styles.types}>{Detalhes.types.map((type) => type.type.name).join('/').toUpperCase()}</Text>
+                        <TouchableOpacity
+                            style={styles.navigationButton}
+                            disabled={Index >= Pokemons.length - 1}
+                            onPress={() => {
+                                if (Index < Pokemons.length - 1) {
+                                    getData(Pokemons[Index + 1].url);
+                                }
+                            }}
+                            title=""
+                        >
+                            <Image
+                                source={require('../../../assets/images/arrow_right.png')}
+                                style={styles.arrow}
+                            />
+                        </TouchableOpacity>
                     </View>
-
-                    <View>
+                    <View style={styles.body}>
+                        <Text style={styles.name}>{Detalhes.name.toUpperCase()}</Text>
+                        <Text style={styles.types}>{Detalhes.types.map((type) => type.type.name).join('/').toUpperCase()}</Text>
                         <Text style={styles.sectionTitle}>Atributos:</Text>
                         {Detalhes.stats.map(stat => (
                             <View style={styles.attributesSection}>
@@ -97,8 +91,9 @@ export default function DetailScreen({ route }) {
                         ))}
                     </View>
                 </View>
-            )}
-        </View>
+            )
+            }
+        </View >
     );
 
 }
@@ -108,14 +103,23 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
         paddingVertical: '20%',
+
     },
-    header: {
-        alignItems: 'center',
-        marginBottom: 20,
+    body: {
+        backgroundColor: '#005bf7',
+        borderBottomLeftRadius: 40,
+        borderBottomRightRadius: 40,
+        borderTopWidth: 1.5,
+        borderTopColor: '#ed0000',
+        padding: 10,
     },
     imageContainer: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffa200',
+        borderTopRightRadius: 40,
+        borderTopLeftRadius: 40,
     },
     navigationButton: {
         height: 50,
@@ -126,25 +130,37 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         backgroundColor: 'gray'
     },
-    arrow: {
-        width: 25,
-        height: 25
-    },
     image: {
         width: 250,
         height: 250,
         borderRadius: 100,
         backgroundColor: 'white',
-        margin: 30,
+        marginVertical: 30,
+        marginHorizontal: 15,
+    },
+    arrow: {
+        width: 25,
+        height: 25
     },
     name: {
-        fontSize: 24,
         fontWeight: 'bold',
-        marginTop: 10,
+        fontSize: 25,
+        marginTop: 35,
+        textAlign: 'center',
+        overflow: 'hidden',
+        color: '#ffb700',
+        textShadowColor: '#f20000',
+        textShadowRadius: 8,
+        textShadowOffset: { width: 3, height: 3 },
+    },
+    types: {
+        textAlign: 'center',
     },
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
+        textAlign: 'center',
+
     },
     attributesSection: {
         flexDirection: 'row',
@@ -152,7 +168,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     attributeName: {
-        marginLeft: 10
+        marginLeft: 10,
+        fontWeight: 'bold',
     },
     loading: {
         flex: 1,
